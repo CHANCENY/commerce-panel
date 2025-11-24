@@ -1,0 +1,145 @@
+<table width="100%" cellspacing="0" cellpadding="0" style="margin-top:40px; width:100%;">
+    <tr>
+        <td>
+
+            <!-- Outer Border Box -->
+            <table width="100%" cellspacing="0" cellpadding="0" style="border:1px solid #ddd; border-radius:4px; padding:0 8px;">
+                <tr>
+                    <td style="padding:16px;">
+
+                        <!-- Invoice Title -->
+                        <table width="100%" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td style="text-align:right;">
+                                    <h3 style="margin:40px 0; font-weight:bold;">
+                                        Invoice&nbsp;&nbsp;#INV-{{ order.id }}
+                                    </h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <hr style="border:none; border-top:1px solid #ccc;">
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Two-column section: Store & Billing -->
+                        <table width="100%" cellspacing="0" cellpadding="0" style="margin-top:20px;">
+                            <tr>
+
+                                <!-- Store Info -->
+                                <td style="width:50%; vertical-align:top;">
+
+                                    <p style="margin-top:40px; margin-bottom:8px; font-weight:bold;">
+                                        {{ store.getStoreName }}
+                                    </p>
+                                    <p>{{ store.getStoreAddress }}</p>
+                                    <p>{{ store.getSupportEmail }}</p>
+                                    <p>{{ store.getPhone }}</p>
+
+                                </td>
+
+                                <!-- Billing Info -->
+                                <td style="width:50%; vertical-align:top; text-align:right;">
+
+                                    <p style="margin-top:40px; margin-bottom:8px; font-weight:bold;">
+                                        Invoice to
+                                    </p>
+                                    <p>
+                                        {{ order.getBilling.getAddress|raw }}
+                                    </p>
+
+                                </td>
+
+                            </tr>
+                        </table>
+
+                        <!-- Invoice Date -->
+                        <table width="100%" cellspacing="0" cellpadding="0" style="margin-top:20px;">
+                            <tr>
+                                <td style="width:50%; vertical-align:top;">
+                                    <p style="margin-top:40px; margin-bottom:0;">
+                                        Invoice Date : {{ order.getCreatedAt|date('jS M Y') }}
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Items Table -->
+                        <table width="100%" cellspacing="0" cellpadding="0" style="margin-top:40px; width:100%; border-collapse:collapse;">
+                            <thead>
+                            <tr style="background:#000; color:#fff;">
+                                <th style="padding:8px; text-align:left;">#</th>
+                                <th style="padding:8px; text-align:left;">Description</th>
+                                <th style="padding:8px; text-align:right;">Quantity</th>
+                                <th style="padding:8px; text-align:right;">Unit cost</th>
+                                <th style="padding:8px; text-align:right;">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in order.getItems %}
+                                <tr>
+                                    <td style="padding:8px; text-align:left;">{{ item.id }}</td>
+                                    <td style="padding:8px; text-align:left;">{{ item.getName }}</td>
+                                    <td style="padding:8px; text-align:right;">{{ item.getQuantity }}</td>
+                                    <td style="padding:8px; text-align:right;">{{ currency_format(item.getUnitPrice, order.getCurrency) }}</td>
+                                    <td style="padding:8px; text-align:right;">{{ currency_format(item.getTotalPrice, order.getCurrency) }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <!-- Summary / Totals -->
+                        <table width="100%" cellspacing="0" cellpadding="0" style="margin-top:40px;">
+                            <tr>
+                                <td style="text-align:right;">
+
+                                    <p style="margin:0 0 8px 0;">
+                                        Sub - Total amount: {{ currency_format(order.subtotal, order.getCurrency) }}
+                                    </p>
+
+                                    <p style="margin:0 0 8px 0;">
+                                        Shipping Total: {{ currency_format(order.getShippingTotal, order.getCurrency) }}
+                                    </p>
+
+                                    <p style="margin:0 0 8px 0;">
+                                        Discount Total: {{ currency_format(order.getDiscountTotal, order.getCurrency) }}
+                                    </p>
+
+                                    {% for tax in order.getOrderTax %}
+                                        <p style="margin:0 0 8px 0;">
+                                            {{ tax.getName }} ({{ tax.getRate }}%) :
+                                            {{ currency_format(tax.getAmount, order.getCurrency) }}
+                                        </p>
+                                    {% endfor %}
+
+                                    <h4 style="margin-bottom:40px; font-weight:bold;">
+                                        Total : {{ currency_format(order.getGrandTotal,order.getCurrency ) }}
+                                    </h4>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <hr style="border:none; border-top:1px solid #ccc;">
+                                </td>
+                            </tr>
+
+                            <!-- Order Status & Thank You Message -->
+                            <tr>
+                                <td>
+                                    <h3>Order status: {{ order.status }}</h3>
+                                    <p style="text-align:center; margin-top:40px;">
+                                        Thank you for shopping with us.
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+</table>

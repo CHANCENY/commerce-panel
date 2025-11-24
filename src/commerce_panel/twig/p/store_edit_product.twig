@@ -1,0 +1,72 @@
+{% extends 'main/base.twig' %}
+
+{% block body %}
+
+
+    <div class="row">
+        <div class="col-12 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Edit ({{ product.title }})</h4>
+                    <div class="row grid-margin">
+                        {% if message %}
+                        <div class="col-12">
+                            <div class="alert alert-{{ message.class }}" role="alert">
+                                <strong>{{ message.type }}!</strong> {{ message.content }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="row">
+                        <div class="col-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form method="post" class="forms-sample" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <label for="exampleInputName1">Name</label>
+                                            <input value="{{ product.getTitle() }}" name="title" type="text" class="form-control" id="exampleInputName1" placeholder="Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail3">SKU</label>
+                                            <input value="{{ product.getSku }}" name="sku" type="text"
+                                                   class="form-control" id="exampleInputEmail3" placeholder="SKU">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleSelectGender">Category</label>
+                                            <select name="category" class="form-control form-select" id="exampleSelectGender">
+                                                <option value="">Select...</option>
+                                                {% for category in categories %}
+
+                                                    <option value="{{ category }}" {{ category == product.getCategory() ? 'selected' : '' }}>{{ category }}</option>
+
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Images</label>
+                                            <input type="file" name="img[]" multiple class="form-control file-upload" accept="image/*"
+                                            data-file="{{ product.getImages()|json_encode }}">
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input {{ product.isActive() ? 'checked' : '' }} name="status" value="1" type="checkbox" class="form-check-input">
+                                                Status
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleTextarea1">Description</label>
+                                            <textarea name="description" class="form-control" id="exampleTextarea1" rows="4">{{ product.getDescription }}</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary me-2">Submit</button>
+                                        <a href="/store/{{ store.getStoreId() }}/products" class="btn btn-light">Cancel</a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

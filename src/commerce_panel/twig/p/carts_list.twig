@@ -1,0 +1,90 @@
+{% extends 'main/base.twig' %}
+
+{% block body %}
+
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Carts In progress</h4>
+                    <div class="row grid-margin">
+                        <div class="col-12">
+                            {% if message %}
+                                <div class="alert alert-{{ message.class }}" role="alert">
+                                    <strong>{{ message.type }}!</strong> {{ message.content }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table id="order-listing" class="table sortable-table">
+                                    <thead>
+                                    <tr class="bg-dark text-white">
+                                        <th>Customer ID</th>
+                                        <th>Customer Email</th>
+                                        <th>Status</th>
+                                        <th>Total</th>
+                                        <th>Currency</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for cart in carts %}
+                                        <tr>
+                                            <td>{{ cart.id }}</td>
+                                            <td>{{ cart.user_id|customer_email }}</td>
+                                            <td>{{ cart.status }}</td>
+                                            <td>{{ cart.total }}</td>
+                                            <td>{{ cart.currency_code }}</td>
+                                            <td class="text-end">
+                                                <button class="btn btn-light" onclick="window.location.href='/store/carts/campaign/send/{{ cart.id }}'">
+                                                    <i class="mdi mdi-mail text-danger"></i>Send Campaign Email
+                                                </button>
+                                                <button class="btn btn-light" onclick="window.location.href='/store/carts/{{ cart.id }}/item/add'">
+                                                    <i class="mdi mdi-plus text-danger"></i>Add Item
+                                                </button>
+                                                <button class="btn btn-light" onclick="window.location.href='/carts/{{ cart.id }}'">
+                                                    <i class="mdi mdi-cart text-danger"></i>View Items
+                                                </button>
+                                                <button class="btn btn-light" onclick="window.location.href='/store/carts/{{ cart.id }}/delete'">
+                                                    <i class="mdi mdi-delete text-danger"></i>Remove
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="13">No products variations found.</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel-2">Price Details</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Mirrored from demo.bootstrapdash.com/hiliteui-new/themes/horizontal-default-dark/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 09 Nov 2025 15:06:48 GMT -->
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>HiliteUI Premium Bootstrap Admin Dashboard Template</title>
+
+    <link rel="shortcut icon" href="https://demo.bootstrapdash.com/hiliteui-new/themes/assets/images/favicon.png" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+    {{CSS|raw }}
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+<div class="container-scroller">
+
+    <!-- partial:partials/_horizontal-navbar.html -->
+    <div class="horizontal-menu">
+        <nav class="navbar top-navbar col-lg-12 col-12 p-0">
+            <div class="container">
+                <div class="text-start navbar-brand-wrapper d-flex align-items-center justify-content-between">
+                    <a class="navbar-brand brand-logo" href="index.html"><img src="https://demo.bootstrapdash.com/hiliteui-new/themes/assets/images/logo.svg" alt="logo"/></a>
+                    <a class="navbar-brand brand-logo-mini" href="index.html"><img src="https://demo.bootstrapdash.com/hiliteui-new/themes/assets/images/logo-mini.svg" alt="logo"/></a>
+                </div>
+                <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+                    <ul class="navbar-nav navbar-nav-right">
+                        <li class="nav-item nav-search d-none d-lg-flex">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                    <span class="input-group-text" id="search">
+                    <i class="mdi mdi-magnify"></i>
+                    </span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Type to search..." aria-label="search" aria-describedby="search">
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
+                                <i class="mdi mdi-bell-outline mx-0"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                                <p class="mb-0 fw-normal float-start dropdown-header">Notifications</p>
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-success">
+                                            <i class="mdi mdi-information mx-0"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <h6 class="preview-subject fw-normal">Application Error</h6>
+                                        <p class="fw-light small-text mb-0 text-muted">
+                                            Just now
+                                        </p>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-warning">
+                                            <i class="mdi mdi-weather-sunny mx-0"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <h6 class="preview-subject fw-normal">Settings</h6>
+                                        <p class="fw-light small-text mb-0 text-muted">
+                                            Private message
+                                        </p>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-info">
+                                            <i class="mdi mdi-account-box mx-0"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <h6 class="preview-subject fw-normal">New user registration</h6>
+                                        <p class="fw-light small-text mb-0 text-muted">
+                                            2 days ago
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-bs-toggle="dropdown">
+                                <i class="mdi mdi-email-outline mx-0"></i>
+                                <p class="notification-ripple notification-ripple-bg">
+                                    <span class="ripple notification-ripple-bg"></span>
+                                    <span class="ripple notification-ripple-bg"></span>
+                                    <span class="ripple notification-ripple-bg"></span>
+                                </p>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+                                <p class="mb-0 fw-normal float-start dropdown-header">Messages</p>
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <img src="https://demo.bootstrapdash.com/hiliteui-new/themes/assets/images/faces/face4.jpg" alt="image" class="profile-pic">
+                                    </div>
+                                    <div class="preview-item-content flex-grow">
+                                        <h6 class="preview-subject ellipsis fw-normal">David Grey
+                                        </h6>
+                                        <p class="fw-light small-text text-muted mb-0">
+                                            The meeting is cancelled
+                                        </p>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <img src="https://demo.bootstrapdash.com/hiliteui-new/themes/assets/images/faces/face2.jpg" alt="image" class="profile-pic">
+                                    </div>
+                                    <div class="preview-item-content flex-grow">
+                                        <h6 class="preview-subject ellipsis fw-normal">Tim Cook
+                                        </h6>
+                                        <p class="fw-light small-text text-muted mb-0">
+                                            New product launch
+                                        </p>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <img src="https://demo.bootstrapdash.com/hiliteui-new/themes/assets/images/faces/face3.jpg" alt="image" class="profile-pic">
+                                    </div>
+                                    <div class="preview-item-content flex-grow">
+                                        <h6 class="preview-subject ellipsis fw-normal"> Johnson
+                                        </h6>
+                                        <p class="fw-light small-text text-muted mb-0">
+                                            Upcoming board meeting
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="nav-item nav-user-icon">
+                            <a class="nav-link" href="#">
+                                <img src="{{ user.get('profileImage') }}" alt="profile"/>
+                            </a>
+                        </li>
+                        <li class="nav-item nav-settings d-none d-lg-flex">
+                            <a class="nav-link" href="#">
+                                <i class="mdi mdi-dots-horizontal"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="horizontal-menu-toggle">
+                        <span class="mdi mdi-menu"></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <nav class="bottom-navbar">
+            <div class="container">
+                <ul class="nav page-navigation">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="mdi mdi-shield-check menu-icon"></i>
+                            <span class="menu-title">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mega-menu">
+                        <a href="#" class="nav-link">
+                            <i class="mdi mdi-view-array menu-icon"></i>
+                            <span class="menu-title">Stores</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="submenu">
+                            <div class="col-group-wrapper row">
+                                <div class="col-group col-md-4">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p class="category-heading">Stores</p>
+                                            <div class="submenu-item">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <ul>
+                                                            {% for store in STORE_LIST %}
+                                                            <li class="nav-item"><a class="nav-link" href="/store/{{ store.id }}">{{ store.name }}</a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-group col-md-4">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p class="category-heading">Products In Stores</p>
+                                            <div class="submenu-item">
+                                                <div class="row">
+                                                    {% for index, batch in STORE_PRODUCTS_LIST %}
+                                                    <div class="col-md-6">
+                                                        <ul>
+                                                            {% for ba in batch %}
+                                                            <li class="nav-item"><a class="nav-link" href="{{ ba.link }}">Prodcuts in {{ ba.name  }}</a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-group col-md-4">
+                                    <p class="category-heading">Creation Links</p>
+                                    <ul class="submenu-item">
+                                        {% for create in CREATE_PRODUCTS %}
+                                        <li class="nav-item"><a class="nav-link" href="{{ create.link }}">{{ create.name }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div class="col-group col-md-4">
+                                    <p class="category-heading">Shop Products Variations</p>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p class="category-heading">Products In Stores</p>
+                                            <div class="submenu-item">
+                                                <div class="row">
+                                                    {% for index, batch in ATTRIBUTES %}
+                                                        <div class="col-md-6">
+                                                            <ul>
+                                                                {% for ba in batch %}
+                                                                    <li class="nav-item"><a class="nav-link" href="{{ ba.link }}">{{ ba.name  }}</a></li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item mega-menu">
+                        <a href="#" class="nav-link">
+                            <i class="mdi mdi-view-array menu-icon"></i>
+                            <span class="menu-title">Orders</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="submenu">
+                            <div class="col-group-wrapper row">
+                                <div class="col-group col-md-4">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p class="category-heading">Carts</p>
+                                            <div class="submenu-item">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <ul>
+                                                            <li class="nav-item"><a class="nav-link" href="/carts/campaign/list">Cart List Campaign</a></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <ul>
+                                                            {% for order_link in STORE_ORDERS %}
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="{{ order_link.link }}">{{ order_link.name }}</a>
+                                                            </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-group col-md-4">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p class="category-heading">Advanced Elements</p>
+                                            <div class="submenu-item">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <ul>
+                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/dragula.html">Dragula</a></li>
+                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/carousel.html">Carousel</a></li>
+                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/clipboard.html">Clipboard</a></li>
+                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/context-menu.html">Context Menu</a></li>
+                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/loaders.html">Loader</a></li>
+                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/slider.html">Slider</a></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <ul>
+                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/popups.html">Popup</a></li>
+                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/notifications.html">Notification</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-group col-md-4">
+                                    <p class="category-heading">Icons</p>
+                                    <ul class="submenu-item">
+                                        <li class="nav-item"><a class="nav-link" href="pages/icons/flag-icons.html">Flag Icons</a></li>
+                                        <li class="nav-item"> <a class="nav-link" href="pages/icons/mdi.html">Mdi icons</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="pages/icons/font-awesome.html">Font Awesome</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="pages/icons/simple-line-icon.html">Simple Line Icons</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="pages/icons/themify.html">Themify Icons</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/user/logout" class="nav-link">
+                            <i class="mdi mdi-file-document menu-icon"></i>
+                            <span class="menu-title">Logout</span></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-md-12">
+                       {% block body %} {% endblock %}
+                    </div>
+                </div>
+            </div>
+            <!-- content-wrapper ends -->
+
+            <!-- partial:partials/_footer.html -->
+            <div class="footer-wrapper">
+                <footer class="footer">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                        <span class="text-center text-sm-left d-block d-sm-inline-block">Copyright &copy; 2025 All rights reserved. </span>
+                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Designed by: <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrapdash</a>. </span>
+                    </div>
+                </footer>
+            </div>
+            <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+
+{{ JS|raw }}
+<!-- End custom js for this page-->
+<script>
+    $(function () {
+        $('input[type="file"]').each(function () {
+            const $input = $(this);
+            const fieldName = $input.attr('name').replace(/\[\]$/, '');
+            const hiddenName = fieldName + '_hd';
+
+            // Insert preview + hidden field
+            const $preview = $('<div class="preview mt-2 d-flex flex-wrap gap-2"></div>');
+            const $hidden = $('<input type="hidden" name="' + hiddenName + '">');
+            $input.after($preview).after($hidden);
+
+            // Parse existing files if editing
+            const existingFiles = $input.data('file');
+            if (existingFiles) {
+                try {
+                    const files = typeof existingFiles === 'string' ? JSON.parse(existingFiles) : existingFiles;
+                    files.forEach(file => addPreview(file, $preview, $hidden));
+                    updateHidden($preview, $hidden);
+                } catch (e) {
+                    console.error('Invalid file data:', e);
+                }
+            }
+
+            // Upload new files
+            $input.on('change', function (e) {
+                const files = e.target.files;
+                if (!files.length) return;
+
+                const formData = new FormData();
+                $.each(files, function (i, file) {
+                    formData.append($input.attr('name'), file);
+                });
+
+                $.ajax({
+                    url: '/store/file/uploads',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (res) {
+                        if (res.files) {
+                            res.files.forEach(file => addPreview(file, $preview, $hidden));
+                            updateHidden($preview, $hidden);
+                        }
+                    },
+                    error: function () {
+                        alert('Upload failed');
+                    }
+                });
+            });
+        });
+
+        // Add preview item
+        function addPreview(file, $preview, $hidden) {
+            const isImage = file.type.startsWith('image/');
+            const isPDF = file.type === 'application/pdf';
+            const isJSON = file.type === 'application/json';
+
+            let content = '';
+            if (isImage) {
+                content = `<img src="${file.path}" alt="${file.name}" style="width:80px;height:80px;object-fit:cover;border:1px solid #ddd;">`;
+            } else if (isPDF) {
+                content = `<div class="d-flex flex-column align-items-center"><i class="fa fa-file-pdf-o fa-3x text-danger"></i><small>${file.name}</small></div>`;
+            } else if (isJSON) {
+                content = `<div class="d-flex flex-column align-items-center"><i class="fa fa-file-code-o fa-3x text-info"></i><small>${file.name}</small></div>`;
+            } else {
+                content = `<div class="d-flex flex-column align-items-center"><i class="fa fa-file-o fa-3x text-secondary"></i><small>${file.name}</small></div>`;
+            }
+
+            const $item = $(`
+            <div class="preview-item position-relative" data-path="${file.path}" style="position:relative;">
+                ${content}
+                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 delete-file" style="border-radius:50%;">&times;</button>
+            </div>
+        `);
+
+            $preview.append($item);
+
+            // Delete handler
+            $item.find('.delete-file').on('click', function () {
+                const path = $item.data('path');
+                $.ajax({
+                    url: '/store/file/delete',
+                    type: 'DELETE',
+                    data: { file: path },
+                    success: function (res) {
+                        if (res.status) {
+                            $item.remove();
+                            updateHidden($preview, $hidden);
+                        } else {
+                            alert('Delete failed');
+                        }
+                    },
+                    error: function () {
+                        alert('Delete error');
+                    }
+                });
+            });
+        }
+
+        // Update hidden input
+        function updateHidden($preview, $hidden) {
+            const files = [];
+            $preview.find('.preview-item').each(function () {
+                const path = $(this).data('path');
+                files.push({ path: path });
+            });
+            $hidden.val(JSON.stringify(files));
+        }
+    });
+</script>
+
+{% block footer_script %}{% endblock %}
+
+</body>
+
+
+<!-- Mirrored from demo.bootstrapdash.com/hiliteui-new/themes/horizontal-default-dark/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 09 Nov 2025 15:07:55 GMT -->
+</html>

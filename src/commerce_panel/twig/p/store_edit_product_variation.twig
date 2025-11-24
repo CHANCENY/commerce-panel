@@ -1,0 +1,144 @@
+{% extends 'main/base.twig' %}
+
+{% block body %}
+
+
+    <div class="row">
+        <div class="col-12 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Edit Variation for product ({{ product.title }})</h4>
+                    <div class="row grid-margin">
+                        {% if message %}
+                            <div class="col-12">
+                                <div class="alert alert-{{ message.class }}" role="alert">
+                                    <strong>{{ message.type }}!</strong> {{ message.content }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="row">
+                        <div class="col-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form method="post" class="forms-sample" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <label for="exampleInputName1">Name</label>
+                                            <input value="{{ attribute.getName() }}" name="title" type="text" class="form-control" id="exampleInputName1" placeholder="Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail3">Display position</label>
+                                            <input value="{{ attribute.getPosition }}" name="position" type="number"
+                                                   class="form-control" id="exampleInputEmail3" placeholder="Position">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail3">Default Cart Quantity</label>
+                                            <input value="{{ attribute.getDefaultCartQuantity }}" name="default_cart_quantity" type="number"
+                                                   class="form-control" id="exampleInputEmail3" placeholder="cart quantity">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail3">Max Cart Quantity</label>
+                                            <input value="{{ attribute.getMaxCartQuantity }}" name="max_cart_quantity" type="number"
+                                                   class="form-control" id="exampleInputEmail3" placeholder="max cart quantity">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail3">Stock Level</label>
+                                            <input value="{{ attribute.getStockLevel }}" name="stock_level" type="number"
+                                                   class="form-control" id="exampleInputEmail3" placeholder="Stock Level">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleSelectGender">Sizes</label>
+                                            <select name="sizes[]" class="form-control form-select" id="exampleSelectGender">
+                                                <option value="">Select...</option>
+                                                {% for size in SIZES %}
+
+                                                    <option value="{{ size }}" {{ in_array(attribute.getSizes, size) ? 'selected' : '' }}>{{ size }}</option>
+
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input {{ attribute.isAlwaysInStock() ? 'checked' : '' }} name="always_in_stock" value="1" type="checkbox" class="form-check-input">
+                                                Always In Stock
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input {{ attribute.isShippable() ? 'checked' : '' }} name="shippable" value="1" type="checkbox" class="form-check-input">
+                                                Shippable
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <details class="border mt-2 p-4">
+                                                <summary>Dimensions</summary>
+                                                <div class="form-group mt-3">
+                                                    <label for="length">Length</label>
+                                                    <input type="number" name="dimension[length]" id="length" class="form-control" value="{{ attribute.getDimension.length }}" placeholder="Length">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="width">Width</label>
+                                                    <input type="number" name="dimension[width]" id="width" class="form-control" value="{{ attribute.getDimension.width }}" placeholder="Width">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="unit">Unit</label>
+                                                    <input type="text" name="dimension[unit]" id="unit" class="form-control" value="{{ attribute.getDimension.unit }}" placeholder="Length">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="height">Height</label>
+                                                    <input type="number" name="dimension[height]" id="height" class="form-control" value="{{ attribute.getDimension.height }}" placeholder="Length">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="weight">Weight</label>
+                                                    <input type="number" name="dimension[weight]" id="weight" class="form-control" value="{{ attribute.getDimension.weight }}" placeholder="Length">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="volume">Volume</label>
+                                                    <input type="number" name="dimension[volume]" id="volume" class="form-control" value="{{ attribute.getDimension.volume }}" placeholder="Length">
+                                                </div>
+                                            </details>
+                                        </div>
+                                        <div class="form-group">
+                                            <details class="border mt-2 p-4">
+                                                <summary>Price</summary>
+                                                <div class="form-group mt-3">
+                                                    <label for="price">Price</label>
+                                                    <input type="number" name="price" id="price" class="form-control" value="{{ attribute.getPrice.getBasePrice }}" placeholder="Price">
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <label for="discount">Discount (%)</label>
+                                                    <input min="0" max="100" type="number" name="discount" id="discount" class="form-control" value="{{ attribute.getPrice.getDiscount }}" placeholder="Discount">
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <label for="currency">Currency</label>
+                                                    <select name="currency" id="currency" class="form-control form-select">
+                                                        <option value="">Choose base currency</option>
+                                                        {% for currency in CURRENCIES %}
+                                                            {% if attribute.getPrice.getCurrency %}
+                                                            <option value="{{ currency.code }}" {{ currency.code == attribute.getPrice.getCurrency ? 'selected' : '' }}>{{ currency.name }}</option>
+                                                            {% else %}
+                                                                <option value="{{ currency.code }}" {{ currency.code == CURRENCY_SET ? 'selected' : '' }}>{{ currency.name }}</option>
+                                                            {% endif %}
+
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </details>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleTextarea1">Description</label>
+                                            <textarea name="description" class="form-control" id="exampleTextarea1" rows="4">{{ attribute.getDescription }}</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary me-2">Submit</button>
+                                        <a href="/store/{{ store.getStoreId() }}/product/{{ product.id }}/variations" class="btn btn-light">Cancel</a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

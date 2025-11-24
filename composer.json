@@ -1,0 +1,29 @@
+{
+    "name": "simp/commerce",
+    "description": "this is standalone commerce ready to us",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Simp\\Commerce\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "CHANCENY",
+            "email": "nyasuluchance6@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "symfony/var-dumper": "^7.3"
+    },
+    "require": {
+        "phpmailer/phpmailer": "^7.0",
+        "simp/router": "^v1.1.5",
+        "twig/twig": "^3.0",
+        "symfony/mime": "^7.3",
+        "twig/string-extra": "^3.22",
+      "authorizenet/authorizenet": "2.0.3",
+      "ext-pdo": "*",
+        "mpdf/mpdf": "^8.2"
+    }
+}

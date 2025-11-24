@@ -1,0 +1,484 @@
+{% extends 'main/base.twig' %}
+
+{% block body %}
+
+    <div class="page-header-tab mt-xl-4">
+        <div class="col-12 ps-0 pe-0">
+            <div class="row ">
+                <div class="col-12 col-sm-6 mb-xs-4  pt-2 pb-2 mb-xl-0">
+                    <ul class="nav nav-tabs tab-transparent" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="overview-tab" data-bs-toggle="tab" href="#" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
+                        </li>
+{#                        <li class="nav-item">#}
+{#                            <a class="nav-link" id="users-tab" data-bs-toggle="tab" href="#" role="tab" aria-controls="users" aria-selected="false">Users</a>#}
+{#                        </li>#}
+{#                        <li class="nav-item">#}
+{#                            <a class="nav-link" id="returns-tab" data-bs-toggle="tab" href="#" role="tab" aria-controls="returns" aria-selected="false">Returns</a>#}
+{#                        </li>#}
+{#                        <li class="nav-item">#}
+{#                            <a class="nav-link" id="more-tab" data-bs-toggle="tab" href="#" role="tab" aria-controls="more" aria-selected="false">More</a>#}
+{#                        </li>#}
+                    </ul>
+                </div>
+                <div class="col-12 col-sm-6 mb-xs-4 mb-xl-0 pt-2 pb-2 text-md-right d-none d-md-block">
+                    <div class="d-flex justify-content-end">
+                        <button class="btn d-flex align-items-center">
+                            <i class="mdi mdi-download me-1"></i>
+                            <span class="text-start font-weight-medium">
+                            Download report
+                            </span>
+                        </button>
+                        <button class="btn d-flex align-items-center">
+                            <i class="mdi mdi-file-pdf  me-1"></i>
+                            <span class="font-weight-medium text-start">
+                            Export
+                            </span>
+                        </button>
+                        <button class="btn d-flex align-items-center pe-0">
+                            <i class="mdi mdi-email-outline  me-1"></i>
+                            <span class="text-start font-weight-medium">
+                            Send as Email
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-content tab-transparent-content pb-0">
+        <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+            <div class="row">
+                <div class="col-sm-6">
+                    {% for summary in thisMonthSummaries %}
+
+                        <div class="row">
+                            {% for su in summary %}
+                                {% for status, item in su %}
+                                    <div class="col-12 col-sm-6 col-md-6 col-xl-6 grid-margin stretch-card">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-flex flex-wrap justify-content-between">
+
+                                                    {# CHANGED THIS ONLY #}
+                                                    <h4 class="card-title">{{ status|replace({'-':' '})|title }}</h4>
+
+                                                    <div class="dropdown dropleft card-menu-dropdown">
+                                                        <button class="btn p-0" type="button" id="dropdown2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="mdi mdi-dots-vertical card-menu-btn"></i>
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdown2" x-placement="left-start">
+                                                            <a class="dropdown-item" href="#">Action</a>
+                                                            <a class="dropdown-item" href="#">Another action</a>
+                                                            <a class="dropdown-item" href="#">Something else here</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div id="purchases" class="carousel slide dashboard-widget-carousel position-static pt-2" data-bs-ride="carousel">
+                                                    <div class="carousel-inner">
+                                                        <div class="carousel-item active">
+                                                            <div class="d-flex flex-wrap align-items-baseline">
+                                                                <h2 class="me-3">{{ item.currency }} {{ item.grand_total }}</h2>
+                                                                <h3 class="text-success">{{ item.grand_total|sales_percentage(status) }}</h3>
+                                                            </div>
+
+                                                            <div class="mb-3">
+                                                                <p class="text-light fw-bold  text-small">
+                                                                    <span class="fw-normal">({{ item.currency }}{{ status|sales_last_month.grand_total }} last month)</span>
+                                                                </p>
+                                                            </div>
+
+                                                            <button class="btn btn-outline-secondary btn-sm btn-icon-text d-flex align-items-center">
+                                                                <i class="mdi mdi-calendar me-1"></i>
+                                                                <span class="text-start">{{ now|date('M') }}</span>
+                                                            </button>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <a class="carousel-control-prev" href="#purchases" role="button" data-bs-slide="prev">
+                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                    </a>
+                                                    <a class="carousel-control-next" href="#purchases" role="button" data-bs-slide="next">
+                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                    </a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+                <div class="col-sm-6">
+                    <div class="col-md-6 col-lg-12 p-0 grid-margin">
+                        <div class="card bg-primary">
+                            <div class="card-body pb-0">
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <h4 class="card-title text-white">Marketing</h4>
+                                    <div class="dropdown dropleft card-menu-dropdown">
+                                        <button class="btn p-0 text-white" type="button" id="dropdown7" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="mdi mdi-dots-vertical card-menu-btn"></i>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdown7" x-placement="left-start">
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                    <div>
+                                        {% set lastYear = last_year('completed') %}
+                                        <h6 class="text-white">Past year</h6>
+                                        <h1 class="text-white mt-1">{{ lastYear.currency }}{{ lastYear.grand_total }}</h1>
+                                        <p class="text-white mb-3">
+                                            Last year was closed with the above grand total of all completed orders.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div>
+                                    <canvas id="areaChartMarketing"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-lg-4 col-xl-4 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <h4 class="card-title">To do</h4>
+                                <div class="dropdown dropleft card-menu-dropdown">
+                                    <button class="btn p-0" type="button" id="dropdown10" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="mdi mdi-dots-vertical card-menu-btn"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdown10" x-placement="left-start">
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="add-items d-flex">
+                                <button class="btn btn-primary  todo-list-add-btn" data-bs-toggle="modal" data-bs-target="#exampleModal-4">Add to list</button>
+                            </div>
+                            <div class="modal fade" id="exampleModal-4" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="ModalLabel">New Task</h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="todo-task-form">
+                                                <div class="form-group">
+                                                    <label for="task-name" class="col-form-label">Task Name:</label>
+                                                    <input name="task_name" type="text" class="form-control" id="task-name">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="start-date" class="col-form-label">Start Date:</label>
+                                                    <input  type="datetime-local" class="form-control" id="start-date" name="start_date">
+                                                    <span>when should alert of task has started should go off</span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="end-date" class="col-form-label">End Date:</label>
+                                                    <input  type="datetime-local" class="form-control" id="end-date" name="end_date">
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-wrapper">
+                                <p class="text-light">People who have a ticket reservation of the event is automatically mark as interested.</p>
+                                <ul class="d-flex flex-column-reverse todo-list">
+                                    {% for task in todoList %}
+                                    <li class="{{ task.status == 0 ? 'completed' : '' }}">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-light font-weight-medium">
+                                                <input class="checkbox" value="{{ task.id }}" type="checkbox">{{ task.title }}
+                                                <i class="input-helper"></i></label>
+                                        </div>
+                                        <i class="remove mdi mdi-delete"></i>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-8 col-xl-8 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <h4 class="card-title">Sales</h4>
+                                <div class="dropdown dropleft card-menu-dropdown">
+                                    <button class="btn p-0" type="button" id="dropdown11" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="mdi mdi-dots-vertical card-menu-btn"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdown11" x-placement="left-start">
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-light">People who have a ticket reservation of the event is automatically mark as interested.</p>
+                            <div class="border pt-2 pb-2 mt-4 mb-3 border-radius-widget">
+                                <ul class="d-md-flex flex-wrap align-items-baseline justify-content-center list-unstyled text-center mb-0 sales-legend">
+
+                                    {% for quick in quickSummaries %}
+                                    <li class="border-right-sm">
+                                        <h6 class="fw-normal">{{ quick.title|upper }}</h6>
+                                        <h2 class="text-white">{{ quick.total }}</h2>
+                                        <p class="text-light ps-md-4 pe-md-4">{{ quick.percent}} % Total</p>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="row mt-1 d-sm-flex">
+                                <div class="col-12">
+                                    <canvas id="salesChartDark"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <h4 class="card-title">Orders</h4>
+                                <div class="dropdown dropleft card-menu-dropdown">
+                                    <button class="btn p-0" type="button" id="dropdown12" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="mdi mdi-dots-vertical card-menu-btn"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdown12" x-placement="left-start">
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table center-aligned-table">
+                                    <thead>
+                                    <tr>
+                                        <th class="ps-0">
+                                            <div class="form-check mb-0">
+                                                <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input"  id="check-all">
+                                                    <i class="input-helper"></i></label>
+                                            </div>
+                                        </th>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Currency</th>
+                                        <th>Total</th>
+                                        <th>Discount</th>
+                                        <th>Subtotal</th>
+                                        <th>Shipping total</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for order in orders %}
+                                    <tr>
+                                        <td class="ps-0">
+                                            <div class="form-check">
+                                                <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input">
+                                                    <i class="input-helper"></i></label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {{ order.id() }}
+                                        </td>
+                                        <td>
+                                            <div class="text-light font-weight-medium">
+                                                {{ order.getCustomer.id }}
+                                            </div>
+                                        </td>
+                                        <td>{{ order.getCurrency }}</td>
+                                        <td>{{ order.getGrandTotal }}</td>
+                                        <td>{{ order.DiscountTotal }}</td>
+                                        <td>{{ order.getSubTotal }}</td>
+                                        <td>{{ order.getShippingTotal }}</td>
+                                        <td><label class="badge badge-success">{{ order.getStatus }}</label></td>
+                                        <td>
+                                            <a href="/store/{{ order.getStoreId }}/orders/{{ order.id }}/view" class="btn btn-light">
+                                                <i class="mdi mdi-eye text-primary"></i>view
+                                            </a>
+                                            <button class="btn btn-light" onclick="window.location.href='/store/{{ order.getStoreId() }}/order/{{ order.id }}/delete';">
+                                                <i class="mdi mdi-close text-danger"></i>Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <h4 class="card-title">Tasks</h4>
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuSizeButton3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        2019
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuSizeButton3" data-x-placement="bottom-end">
+                                        <a class="dropdown-item" href="#">2015</a>
+                                        <a class="dropdown-item" href="#">2016</a>
+                                        <a class="dropdown-item" href="#">2017</a>
+                                        <a class="dropdown-item" href="#">2018</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container-fluid">
+                                <div class="row ticket-card mt-3 pb-2 border-bottom pb-3 mb-3">
+                                    <div class="col-md-1">
+                                        <img class="img-sm rounded-circle mb-4 mb-md-0" src="https://demo.bootstrapdash.com/hiliteui-new/themes/assets/images/faces/face29.jpg" alt="profile image">
+                                    </div>
+                                    <div class="ticket-details col-md-9">
+                                        <div class="d-md-flex">
+                                            <h4 class="text-light me-2 no-wrap">Dustin Lucas</h4>
+                                            <h5 class="me-1 text-white">[#46687]</h5>
+                                            <p class="font-weight-medium ellipsis">Will The Democrats Be Able To Reverse The Online Gambling Ban</p>
+                                        </div>
+                                        <p class="text-gray font-weight-medium">People who have a ticket reservation of the event is automatically mark as interested. Harness The Power Of Words In</p>
+                                        <div class="row text-light d-md-flex d-none">
+                                            <div class="col-12 d-flex">
+                                                <p class="mb-0 me-2 text-gray text-small">30 Min ago - Due in 1 days</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ticket-actions col-md-2 text-lg-end pe-md-0">
+                                        <div class="btn-group dropdown">
+                                            <button type="button" class="btn btn-success btn-md d-flex">Action</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row ticket-card mt-3 pb-2 border-bottom pb-3 mb-3">
+                                    <div class="col-md-1">
+                                        <img class="img-sm rounded-circle mb-4 mb-md-0" src="https://demo.bootstrapdash.com/hiliteui-new/themes/assets/images/faces/face30.jpg" alt="profile image">
+                                    </div>
+                                    <div class="ticket-details col-md-9">
+                                        <div class="d-md-flex">
+                                            <h4 class="text-light me-2 no-wrap">Ida Manning</h4>
+                                            <h5 class="me-1 text-white">[#23135]</h5>
+                                            <p class="font-weight-medium mb-0 ellipsis">Choosing The Best Audio Player Software For Your Computer</p>
+                                        </div>
+                                        <p class="text-light font-weight-medium">People who have a ticket reservation of the event is automatically mark as interested. Harness The Power Of Words In</p>
+                                        <div class="row text-light d-md-flex d-none">
+                                            <div class="col-12 d-flex">
+                                                <p class="mb-0 me-2 text-gray text-small">30 Min ago - Due in 2 days</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ticket-actions col-md-2 text-lg-end pe-md-0">
+                                        <div class="btn-group dropdown">
+                                            <button type="button" class="btn btn-success btn-md d-flex">Action</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row ticket-card mt-3 pb-2 pb-3 mb-3">
+                                    <div class="col-md-1">
+                                        <img class="img-sm rounded-circle mb-4 mb-md-0" src="https://demo.bootstrapdash.com/hiliteui-new/themes/assets/images/faces/face31.jpg" alt="profile image">
+                                    </div>
+                                    <div class="ticket-details col-md-9">
+                                        <div class="d-md-flex">
+                                            <h4 class="text-light me-2 no-wrap">Flora Hunter</h4>
+                                            <h5 class="me-1 text-white">[#23135]</h5>
+                                            <p class="font-weight-medium mb-0 ellipsis">A Discount Toner Cartridge Is Better Than Ever And You Will Save 50 Or More</p>
+                                        </div>
+                                        <p class="text-light mb-2 font-weight-medium">People who have a ticket reservation of the event is automatically mark as interested. Harness The Power Of Words In</p>
+                                        <div class="row text-light d-md-flex d-none">
+                                            <div class="col-12 d-flex">
+                                                <p class="mb-0 me-2 text-gray text-small">30 Min ago - Due in 8 days</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ticket-actions col-md-2 text-lg-end pe-md-0">
+                                        <div class="btn-group dropdown">
+                                            <button type="button" class="btn btn-success btn-md d-flex">Action</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{#        <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">#}
+{#            Tab Item#}
+{#        </div>#}
+{#        <div class="tab-pane fade" id="returns-1" role="tabpanel" aria-labelledby="returns-tab">#}
+{#            Tab Item#}
+{#        </div>#}
+{#        <div class="tab-pane fade" id="more" role="tabpanel" aria-labelledby="more-tab">#}
+{#            Tab Item#}
+{#        </div>#}
+    </div>
+
+    <script>
+        $('#todo-task-form').on('submit', function(e) {
+            e.preventDefault(); // prevent default form submission
+
+            let formData = {
+                title: $('#task-name').val(),
+                start_date: $('#start-date').val(),
+                end_date: $('#end-date').val()
+            };
+
+            $.ajax({
+                url: '/store/task/new',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    console.log("Success:", response);
+
+                    // If backend returns JSON:
+                    // { success: true, message: "Saved" }
+                    if (response.success) {
+                        alert("Task saved successfully.");
+                    } else {
+                        console.log("Failed to save task:", response.message);
+                    }
+                },
+                error: function(xhr) {
+                    console.log("Server error:", xhr.responseText);
+                }
+            });
+        });
+
+    </script>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'main/base.twig' %}
+
+{% block body %}
+
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel-2">Deletion Confirmation</h5>
+                    <button
+                            onclick="window.location.href='{{ request.headers.get('referer') }}'"
+                            type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <strong>Are you sure you want to delete, {{ title }}?</strong>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="window.location.href='{{ action }}'" type="button" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+                    <button onclick="window.location.href='{{ request.headers.get('referer') }}'" type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#exampleModal-2').modal('show');
+        });
+    </script>
+{% endblock %}

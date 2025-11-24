@@ -1,0 +1,90 @@
+{% extends 'main/base.twig' %}
+
+{% block body %}
+
+    {% block head %}
+        <style>
+            .cart-item { border-radius: .5rem; padding: 1rem; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+            .product-image { width: 72px; height: 72px; object-fit: cover; border-radius: .25rem; }
+            .summary-card { position: sticky; top: 1rem; }
+            .muted-sm { font-size: .85rem; }
+            .list-group-item { background: none; }
+        </style>
+    {% endblock %}
+
+    <div class="row cart-page" id="payment-page">
+        <div class="col-12 mt-5 grid-margin stretch-card">
+            <div class="card">
+                <div class="container py-4">
+                    <div class="col-12 mt-5 grid-margin stretch-card">
+                        {% for message in messages %}
+
+                            <div class="col-12">
+                                <div class="alert alert-{{ message.class }}" role="alert">
+                                    <strong>{{ message.type }}!</strong> {{ message.content }}
+                                </div>
+                            </div>
+
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Payment options</h4>
+                                <p class="card-description">Select the payment method you want to use</p>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group" id="payment-method">
+
+                                            {% for method in supported_payment %}
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input onchange="renderPaymentMethod('{{ method.id }}')" type="radio" class="form-check-input" name="paymentMethod"
+                                                               value="{{ method.id }}">
+                                                        {{ method.name }}
+                                                    </label>
+                                                </div>
+                                                <div class="form-group">
+                                                    <p>{{ method.description }}</p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        {% for image in method.logos %}
+                                                        <div class="col-1">
+                                                            <img src="{{ image }}" alt="" style="width: 70px;">
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+
+                                            {% endfor %}
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body" id="payment-form">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <noscript id="paymentMethodSupported" style="display: none;">{{ supported_payment|json_encode|raw }}</noscript>
+    <script>
+        const paymentMethods = JSON.parse(document.getElementById('paymentMethodSupported').textContent);
+
+        function renderPaymentMethod(paymentMethod) {
+            const foundMethod = paymentMethods.find(method => method.id === paymentMethod);
+
+            if (foundMethod) {
+                document.getElementById('payment-form').innerHTML = foundMethod.form;
+            }
+        }
+
+    </script>
+{% endblock %}

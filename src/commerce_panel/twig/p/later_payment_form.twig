@@ -1,0 +1,147 @@
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+        <form action="/checkout/payment/{{ cart_id }}" method="post" class="card-body">
+            <h4 class="card-title">Pay Later Agreement</h4>
+
+            <p class="mb-3 text-muted">
+                If you choose "Pay Later," please confirm your agreement to the terms below.
+            </p>
+
+            <!-- BILLING DETAILS -->
+            <fieldset class="border p-3 mb-4">
+                <legend class="w-auto px-2">Billing Details</legend>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label>Full Name</label>
+                        <input type="text" name="billing_full_name" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Email</label>
+                        <input type="email" name="billing_email" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Address Line 1</label>
+                        <input type="text" name="billing_address_line1" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Address Line 2</label>
+                        <input type="text" name="billing_address_line2" class="form-control">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>City</label>
+                        <input type="text" name="billing_city" class="form-control">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>State</label>
+                        <input type="text" name="billing_state" class="form-control">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>Postal Code</label>
+                        <input type="text" name="billing_postal_code" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Country</label>
+                        <input type="text" name="billing_country" class="form-control">
+                    </div>
+
+                </div>
+            </fieldset>
+
+            <!-- SHIPPING DETAILS -->
+            <fieldset class="border p-3 mb-4">
+                <legend class="w-auto px-2">Shipping Details</legend>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label>Full Name</label>
+                        <input type="text" name="shipping_full_name" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Email</label>
+                        <input type="email" name="shipping_email" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Address Line 1</label>
+                        <input type="text" name="shipping_address_line1" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Address Line 2</label>
+                        <input type="text" name="shipping_address_line2" class="form-control">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>City</label>
+                        <input type="text" name="shipping_city" class="form-control">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>State</label>
+                        <input type="text" name="shipping_state" class="form-control">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>Postal Code</label>
+                        <input type="text" name="shipping_postal_code" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Country</label>
+                        <input type="text" name="shipping_country" class="form-control">
+                    </div>
+
+                </div>
+            </fieldset>
+
+            <!-- PAY LATER AGREEMENT -->
+            <fieldset class="border p-3 mb-4">
+                <legend class="w-auto px-2">Pay Later Agreement</legend>
+
+                <p class="text-muted">
+                    If you choose to pay later, please check the box below to confirm your agreement.
+                </p>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" name="pay_later_agree" value="1" id="payLater" class="form-check-input">
+                    <label class="form-check-label" for="payLater">
+                        I agree to pay the total amount for this product at a later date as arranged.
+                    </label>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label>Expected Payment Date</label>
+                    <input type="date" name="expected_payment_date" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label>Additional Notes (Optional)</label>
+                    <textarea name="pay_later_notes" rows="3" class="form-control" placeholder="Any special arrangements or notes..."></textarea>
+                </div>
+            </fieldset>
+
+            <input type="hidden" name="amount" value="{{  amount }}">
+            <input type="hidden" name="currency" value="{{  currency }}">
+            <input type="hidden" name="type" value="{{ type }}">
+            <input type="hidden" name="cart_id" value="{{ cart_id }}">
+
+            <div class="form-group mt-5">
+                <button type="submit" class="btn btn-primary mr-2">
+                    <i class="mdi mdi-content-save-check"></i>
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

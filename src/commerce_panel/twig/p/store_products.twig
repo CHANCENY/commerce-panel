@@ -1,0 +1,78 @@
+{% extends 'main/base.twig' %}
+
+{% block body %}
+
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Products in store {{ store }}</h4>
+                    <div class="row grid-margin">
+                        <div class="col-12">
+                            {% if message %}
+                            <div class="alert alert-{{ message.class }}" role="alert">
+                                <strong>{{ message.type }}!</strong> {{ message.content }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table id="order-listing" class="table">
+                                    <thead>
+                                    <tr class="bg-dark text-white">
+                                        <th>Product #</th>
+                                        <th>SKU</th>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for product in products %}
+                                    <tr>
+                                        <td>{{ product.id }}</td>
+                                        <td>{{ product.getSku() }}</td>
+                                        <td>{{ product.getTitle() }}</td>
+                                        <td>{{ product.getCategory() }}</td>
+                                        <td>{{ product.getDescription()|u.truncate('Farm fresh eggs, pack of 12.'|length,'...', false) }}</td>
+                                        <td>
+                                            {% if product.isActive() %}
+                                            <label class="badge badge-success">Online</label>
+                                            {% else %}
+                                            <label class="badge badge-danger">Offline</label>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-end">
+                                            <a href="/store/{{ store.getStoreId() }}/products/{{ product.id }}/edit" class="btn btn-light">
+                                                <i class="mdi mdi-store-edit text-primary"></i>Edit
+                                            </a>
+                                            <a href="/store/{{ store.getStoreId() }}/product/{{ product.id }}/variations" class="btn btn-light">
+                                                <i class="mdi mdi-list-box text-primary"></i>Variations
+                                            </a>
+                                            <button class="btn btn-light" onclick="window.location.href='/store/{{ store.getStoreId() }}/product/{{ product.id }}/delete';">
+                                                <i class="mdi mdi-delete text-danger"></i>Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="7">No products found for store ({{ store.getStoreName() }})</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'main/base.twig' %}
+
+{% block body %}
+
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Orders for store: {{ store.getStoreName }}</h4>
+                    <div class="row grid-margin">
+                        <div class="col-12">
+                            {% if message %}
+                                <div class="alert alert-{{ message.class }}" role="alert">
+                                    <strong>{{ message.type }}!</strong> {{ message.content }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table id="order-listing" class="table">
+                                    <thead>
+                                    <tr class="bg-dark text-white">
+                                        <th>Order #</th>
+                                        <th>Currency</th>
+                                        <th>Sub total</th>
+                                        <th>Tax total</th>
+                                        <th>Shipping total</th>
+                                        <th>Discount total</th>
+                                        <th>Grand Total</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for order in orders %}
+                                        <tr>
+                                            <td>{{ order.id }}</td>
+                                            <td>{{ order.getCurrency }}</td>
+                                            <td>{{ currency_format(order.getSubTotal, order.getCurrency ) }}</td>
+                                            <td>{{ currency_format(order.getTaxTotal, order.getCurrency ) }}</td>
+
+                                            <td>{{ currency_format(order.getShippingTotal, order.getCurrency ) }}</td>
+                                            <td>{{ currency_format(order.getDiscountTotal, order.getCurrency ) }}</td>
+                                            <td>{{ currency_format(order.getGrandTotal, order.getCurrency ) }}</td>
+
+                                            <td>{{ order.getStatus }}</td>
+                                            <td class="text-end">
+                                                <a href="/store/{{ store.getStoreId }}/orders/{{ order.id }}/view" class="btn btn-light">
+                                                    <i class="mdi mdi-eye text-primary"></i>view
+                                                </a>
+                                                <button class="btn btn-light" onclick="window.location.href='/store/{{ store.getStoreId() }}/order/{{ order.id }}/delete';">
+                                                    <i class="mdi mdi-delete text-danger"></i>Remove
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="7">No orders found for store ({{ store.getStoreName() }})</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

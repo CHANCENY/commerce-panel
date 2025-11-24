@@ -1,0 +1,203 @@
+{% extends 'main/base.twig' %}
+
+{% block body %}
+
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Products Variations for ({{ product.getTitle }}) in store "{{ store.getStoreName }}"</h4>
+                    <div class="row grid-margin">
+                        <div class="col-12">
+                            {% if message %}
+                                <div class="alert alert-{{ message.class }}" role="alert">
+                                    <strong>{{ message.type }}!</strong> {{ message.content }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row grid-margin">
+                        <div class="col-12">
+                            <a href="/store/{{ store.getStoreId() }}/product/{{ product.id }}/variations/add" class="btn btn-primary">Add New Variation</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table id="order-listing" class="table sortable-table">
+                                    <thead>
+                                    <tr class="bg-dark text-white">
+                                        <th>Variation #</th>
+                                        <th>Name</th>
+                                        <th>Stock Level</th>
+                                        <th>Always In Stock</th>
+                                        <th>Cart Default Quantity</th>
+                                        <th>Max Cart Quantity</th>
+                                        <th>
+                                            <select title="select to check price in other currencies" onchange="convertCurrency(this)" class="form-select">
+                                                {% for currency in CURRENCIES %}
+                                                    <option value="{{ currency.code }}" {{ currency.code == CURRENCY_SET ? 'selected' : '' }}>{{ currency.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for attribute in attributes %}
+                                        <tr>
+                                            <td>{{ attribute.id }}</td>
+                                            <td>{{ attribute.getName() }}</td>
+                                            <td>{{ attribute.getStockLevel() }}</td>
+                                            <td>{{ attribute.isAlwaysInStock() ? 'Yes' : 'No' }}</td>
+                                            <td>{{ attribute.getDefaultCartQuantity }}</td>
+                                            <td>{{ attribute.getMaxCartQuantity }}</td>
+                                            <td class="prices" style="font-size: large;"><a href="#"
+                                                                  data-original="{{ attribute.getPrice.toArray|json_encode|url_encode }}"
+                                                                  data-bs-toggle="modal" data-bs-target="#exampleModal-2"
+                                                                  title="click to see full price details"
+                                                 onclick="priceDetails('{{ attribute.getPrice.toArray|json_encode|url_encode }}')">
+                                                  {{  attribute.getPrice.getCurrency|currency_symbol }}
+                                                    {{ attribute.getPrice.getBasePrice }}</a>
+                                            </td>
+                                            <td title="Online indicate that variation stock level is greater than 0, otherwise it is offline
+                                                        Noted that if variation is always in stock, it will always be online.">
+                                                {% if attribute.isAlwaysInStock and attribute.getStockLevel != 0 %}
+                                                    <label class="badge badge-success">Online</label>
+                                                {% else %}
+                                                    <label class="badge badge-danger">Offline</label>
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="/store/{{ store.getStoreId() }}/product/{{ product.id }}/variation/{{ attribute.id }}/edit" class="btn btn-light">
+                                                    <i class="mdi mdi-eye text-primary"></i>Edit
+                                                </a>
+                                                <button class="btn btn-light" onclick="window.location.href='/store/{{ store.getStoreId() }}/product/{{ product.id }}/variation/{{ attribute.id }}/duplicate'">
+                                                    <i class="mdi mdi-close text-danger"></i>Duplicate
+                                                </button>
+                                                <button class="btn btn-light" onclick="window.location.href='/store/{{ store.getStoreId() }}/product/{{ product.id }}/variation/{{ attribute.id }}/delete'">
+                                                    <i class="mdi mdi-close text-danger"></i>Remove
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="13">No products variations found.</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel-2">Price Details</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <noscript style="display: none;" id="currencies">{{ CURRENCIES|json_encode|raw }}</noscript>
+
+    <script>
+        function priceDetails(price) {
+            price = JSON.parse(decodeURIComponent(price));
+
+            var html = `
+        <p><strong>Base Price:</strong> ${price.base_price} ${price.currency}</p>
+        <p><strong>Discount:</strong> ${price.discount}%</p>
+        <p><strong>Currency:</strong> ${price.currency}</p>
+
+        <h6>Taxes</h6>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Rate (%)</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+            if (price.taxes && price.taxes.length > 0) {
+                price.taxes.forEach(tax => {
+                    html += `
+                <tr>
+                    <td>${tax.name}</td>
+                    <td>${tax.rate}</td>
+                    <td>${tax.amount}</td>
+                </tr>
+            `;
+                });
+            } else {
+                html += `
+            <tr>
+                <td colspan="3" class="text-center">No taxes</td>
+            </tr>
+        `;
+            }
+
+            html += `
+            </tbody>
+        </table>
+        <p class="fw-bold text-end">Total: ${price.total} ${price.currency}</p>
+    `;
+
+            $('#exampleModal-2 .modal-body').html(html);
+        }
+
+        function convertCurrency(select) {
+            var currency = select.value; // this is currency we are converting to eg ruble russian
+            var ratings = {{ ratings|json_encode|raw }}
+            var currencies = JSON.parse(document.getElementById('currencies').textContent);
+
+            var foundRating = ratings.find(rating => rating.code === currency); //currency we are converting to data
+            var foundCurrency = currencies.find(item => item.code === currency); // currency we are converting from meta data
+
+            if (foundRating && foundCurrency) {
+                $(".prices a").each(function () {
+
+                    if ($(this).get(0).dataset.original.length > 10) {
+                        var original = JSON.parse(decodeURIComponent($(this).get(0).dataset.original));
+
+                        const base_amount = original.base_price;
+                        const original_currency = original.currency;
+                        const converting_rate = ratings.find(rating => rating.code === original_currency).rate_data[currency];
+
+                        // Calculate converted amount
+                        const converted_amount = base_amount * converting_rate;
+
+                        // Format (2 decimal places)
+                        const display_amount = converted_amount.toFixed(2);
+
+                        // Update price text (use target currency symbol)
+                        $(this).text(`${foundCurrency.code} ${display_amount}`);
+                    }
+
+                });
+            }
+
+        }
+    </script>
+
+{% endblock %}
