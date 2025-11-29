@@ -8,6 +8,7 @@ use Simp\Commerce\cart\Cart;
 use Simp\Commerce\connection\Mail;
 use Simp\Commerce\conversion\Conversion;
 use Simp\Commerce\customer\Customer;
+use Simp\Commerce\payment\CommercePayment;
 use Simp\Commerce\product\Product;
 use Simp\Commerce\product\ProductAttribute;
 use Simp\Commerce\storage\CommerceTemporary;
@@ -518,6 +519,12 @@ class Order
      */
     public function getOrders(): array
     {
-        return $this->orders;
+
+        return $this->orders ?? [];
+    }
+
+    public function getPayment(): ?CommercePayment
+    {
+        return CommercePayment::loadByOrderId($this->id);
     }
 }

@@ -112,7 +112,9 @@ $packageStorageTables = [
      CREATE TABLE IF NOT EXISTS commerce_shipping_address (id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,order_id INT UNSIGNED NOT NULL,full_name VARCHAR(255) NOT NULL,phone VARCHAR(50) NULL,email VARCHAR(255) NULL,address_line1 VARCHAR(255) NOT NULL,address_line2 VARCHAR(255) NULL,city VARCHAR(150) NOT NULL,state VARCHAR(150) NULL,postal_code VARCHAR(50) NULL,country VARCHAR(150) NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)",
     "CREATE TABLE IF NOT EXISTS commerce_todo_task (id INT AUTO_INCREMENT PRIMARY KEY, title VARCHAR(255) NOT NULL, start_date INT(11) NOT NULL, end_date INT(11) NOT NULL, status VARCHAR(255) NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)",
     "CREATE TABLE IF NOT EXISTS commerce_payment (id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, order_id INT UNSIGNED NOT NULL, payment_method VARCHAR(50) NOT NULL, transaction_id VARCHAR(255) DEFAULT NULL, amount DECIMAL(10,2) NOT NULL DEFAULT 0.00, status VARCHAR(50) NOT NULL DEFAULT 'pending', currency VARCHAR(10) NOT NULL DEFAULT 'MWK', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, CONSTRAINT fk_payment_order FOREIGN KEY (order_id) REFERENCES commerce_order(id) ON DELETE CASCADE ON UPDATE CASCADE)",
-    "CREATE TABLE IF NOT EXISTS commerce_pay_later (id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, order_id INT UNSIGNED NOT NULL, expected_date INT(11) NOT NULL, pay_later_agree BOOLEAN NULL DEFAULT 0, pay_later_notes TEXT NULL)"
+    "CREATE TABLE IF NOT EXISTS commerce_pay_later (id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, order_id INT UNSIGNED NOT NULL, expected_date INT(11) NOT NULL, pay_later_agree BOOLEAN NULL DEFAULT 0, pay_later_notes TEXT NULL)",
+    "CREATE TABLE IF NOT EXISTS commerce_payment_details (id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, payment_id INT(11) NOT NULL, card_number VARCHAR(255) NOT NULL, expiration_date VARCHAR(255) NOT NULL, card_type VARCHAR(255))",
+
 ];
 
 if (empty($_ENV['STORAGE_CREATED_FLAG'])) {
@@ -127,7 +129,7 @@ if (empty($_ENV['STORAGE_CREATED_FLAG'])) {
  * SMTP_PASS
  * SMTP_PORT
  * SMTP_SECURE
- * SMTP_USER=
+ * SMTP_USER
  * FROM_NAME
  * FROM_EMAIL
  * REPLY_TO_EMAIL
@@ -3794,6 +3796,8 @@ const _CALLBACK = [
     'order_confirmation' => \Simp\Commerce\callback\OrderConfirmationCallBack::class,
     'order_status_change_email' => \Simp\Commerce\callback\OrderStatusChangeEmailCallBack::class,
     'order_invoice_email' => \Simp\Commerce\callback\OrderInvoiceSendCallBack::class,
+    'authorize_transaction' => \Simp\Commerce\callback\AuthorizeTransactionUtility::class,
+    'order_payment_email' => \Simp\Commerce\callback\OrderPaymentSendCallBack::class,
 
     // Add your callback from here
 ];
@@ -4039,13 +4043,23 @@ try{
         //Payment routes
         $router->get('/checkout/payment/[cart_id:int]','checkoutPayment', CommercePanelController::class);
         $router->post('/checkout/payment/[cart_id:int]','checkoutPayment', CommercePanelController::class);
+        $router->get('/store/[store_id:string]/payments','paymentsListing', CommercePanelController::class);
+        $router->get('/store/[store_id:string]/payments/[pid:int]/view','paymentsView', CommercePanelController::class);
+        $router->get('/store/[store_id:string]/payments/[pid:int]/delete','paymentsDelete', CommercePanelController::class);
+        $router->get('/store/[store_id:string]/payments/[pid:int]/credit-payment','paymentsCreditPayment', CommercePanelController::class);
+        $router->post('/store/[store_id:string]/payments/[pid:int]/credit-payment','paymentsCreditPayment', CommercePanelController::class);
 
+        $router->post('/store/[store_id:string]/payments/[pid:int]/status','paymentUpdateStatus', CommercePanelController::class);
+        $router->get('/store/[store_id:string]/payments/[pid:int]/send-invoice','paymentSendInvoice', CommercePanelController::class);
+        $router->get('/store/[store_id:string]/payments/[pid:int]/print','paymentPrintInvoice', CommercePanelController::class);
+       
 
         return $router->getResponse();
     })();
 
     $response->send(true);
 }catch (\Throwable $e){
+    dump($e);
     $response = new Response(VIEW->render('pages/samples/error-400.html'));
     $response->send(true);
 }

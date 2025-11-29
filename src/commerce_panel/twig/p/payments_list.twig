@@ -1,0 +1,88 @@
+{% extends 'main/base.twig' %}
+
+{% block body %}
+
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Order payments for store: {{ store.getStoreName }}</h4>
+                    <div class="row grid-margin">
+                        <div class="col-12">
+                            {% if message %}
+                                <div class="alert alert-{{ message.class }}" role="alert">
+                                    <strong>{{ message.type }}!</strong> {{ message.content }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table id="order-listing" class="table">
+                                    <thead>
+                                    <tr class="bg-dark text-white">
+                                        <th>SID #</th>
+                                        <th>Trans ID</th>
+                                        <th>Amount</th>
+                                        <th>Currency</th>
+                                        <th>Order Id</th>
+                                        <th>Method</th>
+                                        <th>Card</th>
+                                        <th>Status</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for payment in payments %}
+                                        <tr>
+                                            <td>{{ payment.id }}</td>
+                                            <td>{{ payment.getTransactionId }}</td>
+                                            <td>{{ payment.getAmount }}</td>
+                                            <td>{{ payment.getCurrency }}</td>
+                                            <td>{{ payment.getOrderId }}</td>
+                                            <td>{{ payment.getMethod }}</td>
+                                            <td>{{ payment.getPaymentDetails.card_number }}</td>
+                                            <td>{{ payment.getStatus }}</td>
+                                            <td>{{ payment.getCreatedAt }}</td>
+                                            <td class="text-end">
+                                                <a href="/store/{{ store.getStoreId }}/payments/{{ payment.id }}/view" class="btn btn-light">
+                                                    <i class="mdi mdi-eye text-primary"></i>view
+                                                </a>
+                                                {% if payment.getMethod == 'credit_card' and payment.getStatus == 'paid' %}
+                                                    <a href="/store/{{ store.getStoreId }}/payments/{{ payment.id }}/refund" class="btn btn-light">
+                                                        <i class="mdi mdi-cash-refund text-primary"></i>refund
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if payment.getMethod == 'later' %}
+                                                    <a href="/store/{{ store.getStoreId }}/payments/{{ payment.id }}/credit-payment" class="btn btn-light">
+                                                        <i class="mdi mdi-link text-primary"></i>Payment link
+                                                    </a>
+                                                {% endif %}
+
+
+                                                <button class="btn btn-light" onclick="window.location.href='/store/{{ store.getStoreId() }}/payments/{{ payment.id }}/delete';">
+                                                    <i class="mdi mdi-delete text-danger"></i>Remove
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="7">No payments found for store ({{ store.getStoreName() }})</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

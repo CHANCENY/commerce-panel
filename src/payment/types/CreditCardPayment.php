@@ -13,6 +13,7 @@ use net\authorize\api\contract\v1\TransactionRequestType;
 use net\authorize\api\contract\v1\TransactionResponseType;
 use net\authorize\api\controller\CreateTransactionController;
 use RuntimeException;
+use Simp\Commerce\callback\AuthorizeTransactionUtility;
 use Simp\Commerce\conversion\Conversion;
 use Simp\Commerce\order\Order;
 use Simp\Commerce\order\OrderFailedException;
@@ -88,7 +89,6 @@ class CreditCardPayment extends PaymentGatWayAbstract
     {
         // needed keys
         $requiredKeys = [
-            'cart_id',
             'billing_full_name',
             'billing_email',
             'billing_address_line1',
@@ -138,19 +138,47 @@ class CreditCardPayment extends PaymentGatWayAbstract
         if ($response['status'] === 'success') {
 
             $order = $this->saveOrder($paymentData);
-            $orders = $order->getOrders();
+            $orders = !empty($order->getOrders()) ? $order->getOrders() : [$order];
+
             if ($orders) {
 
                 foreach ($orders as $order) {
-                    $payment = new CommercePayment();
+                    $payment = $order->getPayment();
 
-                    $payment->setOrderId($order->id());
-                    $payment->setAmount($response['amount']);
-                    $payment->setStatus('paid');
-                    $payment->setCurrency($response['currency']);
-                    $payment->setMethod($this->getGatewayId());
-                    $payment->setTransactionId($response['transactionId']);
-                    return $payment->save();
+                    if ($payment instanceof CommercePayment) {
+                        $payment->setStatus('completed');
+                        $payment->setTransactionId($response['transactionId']);
+                        $payment->setMethod($this->getGatewayId());
+                    }
+                    else {
+                        $payment = new CommercePayment();
+                        $payment->setOrderId($order->id());
+                        $payment->setAmount($response['amount']);
+                        $payment->setStatus('paid');
+                        $payment->setCurrency($response['currency']);
+                        $payment->setMethod($this->getGatewayId());
+                        $payment->setTransactionId($response['transactionId']);
+                    }
+                    $payment->save();
+
+                    $utility = new AuthorizeTransactionUtility();
+                    $detail = $utility->getTransactionDetails($response['transactionId']);
+                    $payment = CommercePayment::getPaymentByTransactionId($response['transactionId']);
+
+                    if ($detail && $payment) {
+
+                        $query = "INSERT INTO commerce_payment_details (payment_id, card_number, expiration_date, card_type) VALUES (?, ?, ?,?)";
+                        $stmt = DB_CONNECTION->connect()->prepare($query);
+                        $stmt->execute([
+                            $payment->id(),
+                            $detail['card']['cardNumber'],
+                            $detail['card']['expirationDate'],
+                            $detail['card']['cardType'],
+                        ]);
+                        return true;
+
+                    }
+
                 }
             }
 

@@ -1,0 +1,222 @@
+{% extends 'main/base.twig' %}
+
+{% block body %}
+
+
+    <div class="row">
+        <div class="col-12 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Create product for store ({{ store.getStoreName }})</h4>
+                    <div class="row grid-margin">
+                        {% if message %}
+                            <div class="col-12">
+                                <div class="alert alert-{{ message.class }}" role="alert">
+                                    <strong>{{ message.type }}!</strong> {{ message.content }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="row">
+                        <div class="col-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="col-md-12 grid-margin stretch-card">
+                                        <div class="card">
+                                            <form method="post" class="card-body">
+                                                <input type="hidden" name="amount" value="{{  amount }}">
+                                                <input type="hidden" name="currency" value="{{  currency }}">
+                                                <input type="hidden" name="type" value="{{ type }}">
+                                                <input type="hidden" name="cart_id" value="{{ cart_id }}">
+
+                                                <!-- BILLING DETAILS -->
+                                                <fieldset class="border p-3 mb-4">
+                                                    <legend class="w-auto px-2">Billing Details</legend>
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label>Full Name</label>
+                                                            <input type="text" name="billing_full_name" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label>Email</label>
+                                                            <input type="email" name="billing_email" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label>Address Line 1</label>
+                                                            <input type="text" name="billing_address_line1" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label>Address Line 2</label>
+                                                            <input type="text" name="billing_address_line2" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>City</label>
+                                                            <input type="text" name="billing_city" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>State</label>
+                                                            <input type="text" name="billing_state" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>Postal Code</label>
+                                                            <input type="text" name="billing_postal_code" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label>Country</label>
+                                                            <input type="text" name="billing_country" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </fieldset>
+
+                                                <!-- SHIPPING DETAILS -->
+                                                <fieldset class="border p-3 mb-4">
+                                                    <legend class="w-auto px-2">Shipping Details</legend>
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label>Full Name</label>
+                                                            <input type="text" name="shipping_full_name" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label>Email</label>
+                                                            <input type="email" name="shipping_email" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label>Address Line 1</label>
+                                                            <input type="text" name="shipping_address_line1" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label>Address Line 2</label>
+                                                            <input type="text" name="shipping_address_line2" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>City</label>
+                                                            <input type="text" name="shipping_city" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>State</label>
+                                                            <input type="text" name="shipping_state" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>Postal Code</label>
+                                                            <input type="text" name="shipping_postal_code" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label>Country</label>
+                                                            <input type="text" name="shipping_country" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </fieldset>
+
+                                                <!-- PAY CARD -->
+                                                <fieldset class="border p-3 mb-4">
+                                                    <legend class="w-auto px-2">Card Information</legend>
+
+                                                    <p class="text-muted">
+                                                        Add your card information below. {{ warning|length > 1 ? "(Note: "~warning~")" : '' }}
+                                                    </p>
+
+                                                    <div class="form-group mb-3">
+                                                        <label>Name on Card</label>
+                                                        <input type="text" name="card_name" class="form-control" placeholder="John Doe">
+                                                    </div>
+
+                                                    <div class="form-group mb-3">
+                                                        <label>Card Number</label>
+                                                        <input type="text" name="card_number" class="form-control" placeholder="xxxx xxxx xxxx xxxx" maxlength="19">
+                                                    </div>
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group mb-3">
+                                                                <label>Expire Month</label>
+
+                                                                {% set months = {
+                                                                    '01': 'January',
+                                                                    '02': 'February',
+                                                                    '03': 'March',
+                                                                    '04': 'April',
+                                                                    '05': 'May',
+                                                                    '06': 'June',
+                                                                    '07': 'July',
+                                                                    '08': 'August',
+                                                                    '09': 'September',
+                                                                    '10': 'October',
+                                                                    '11': 'November',
+                                                                    '12': 'December'
+                                                                } %}
+
+                                                                <select name="exp_month" class="js-example-basic-single w-100 form-select">
+                                                                    <option value="" disabled selected>Select month</option>
+                                                                    {% for value, label in months %}
+                                                                        <option value="{{ value }}">{{ label }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group mb-3">
+                                                                <label>Expire Year</label>
+
+                                                                <select name="exp_year" class="js-example-basic-single w-100 form-select">
+                                                                    <option value="" disabled selected>Select year</option>
+
+                                                                    {% set current_year = "now"|date("Y") %}
+                                                                    {% for i in 0..12 %}
+                                                                        {% set y = current_year + i %}
+                                                                        <option value="{{ y }}">{{ y }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group mb-3">
+                                                        <label>CVV</label>
+                                                        <input type="text" name="cvv" class="form-control" placeholder="123" maxlength="4">
+                                                    </div>
+
+                                                </fieldset>
+
+                                                <div class="form-group mb-3 mt-4">
+                                                    <button type="submit" class="btn btn-primary fw-bold" name="submit" >
+                                                        <i class="mdi mdi-secure"></i>
+                                                        Pay {{ currency_format(total, currency) }}
+                                                    </button>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

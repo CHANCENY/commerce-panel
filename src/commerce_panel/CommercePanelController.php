@@ -3,6 +3,8 @@
 namespace Simp\Commerce\commerce_panel;
 
 use DateTime;
+use Mpdf\MpdfException;
+use Mpdf\Output\Destination;
 use Simp\Commerce\account\User;
 use Simp\Commerce\cart\Cart;
 use Simp\Commerce\connection\Mail;
@@ -10,6 +12,7 @@ use Simp\Commerce\conversion\Conversion;
 use Simp\Commerce\customer\Customer;
 use Simp\Commerce\invoice\InvoiceFileManager;
 use Simp\Commerce\order\Order;
+use Simp\Commerce\payment\CommercePayment;
 use Simp\Commerce\payment\PaymentGatWayAbstract;
 use Simp\Commerce\payment\PaymentGetWayInterface;
 use Simp\Commerce\product\Price;
@@ -866,6 +869,157 @@ class CommercePanelController
             'cart' => $cart_data,
             'supported_payment' => $supported_payment,
             'messages' => $messages ?? [],
+        ]));
+    }
+
+    public function paymentsListing(...$args)
+    {
+        extract($args);
+
+        $payments = CommercePayment::getPaymentByStore($request->query->get('store_id'));
+        return new Response($this->view->render('p/payments_list.twig', [
+            'payments' => $payments,
+            'store' => new Store($request->query->get('store_id')),
+        ]));
+    }
+
+    public function paymentsView(...$args): Response
+    {
+        extract($args);
+
+        $payment = CommercePayment::loadById($request->query->get('pid'));
+        return new Response($this->view->render('p/payments_view.twig', [
+            'payment' => $payment,
+            'store' => new Store($request->query->get('store_id')),
+        ]));
+    }
+
+    public function paymentUpdateStatus(...$args)
+    {
+        extract($args);
+        $status = $request->query->get('status', 'placed');
+        $payment = CommercePayment::loadById($request->query->get('pid'));
+
+        if (!empty($status)) {
+            $r = $payment->updateStatus($status);
+
+            return new JsonResponse(['success' => $r]);
+        }
+        return new JsonResponse(['success' => false]);
+    }
+
+    public function paymentSendInvoice(...$args)
+    {
+        extract($args);
+
+        $store = new Store($request->query->get('store_id'));
+        $payment = CommercePayment::loadById($request->query->get('pid'));
+
+        $callback = _CALLBACK['order_payment_email'] ?? null;
+
+        if ($callback) {
+            $callbackObject = new $callback;
+            $email = $callbackObject->sendOrderPaymentEmail(payment: $payment, store: $store);
+
+            $cust = new Customer()->load($payment->getOrder()->getUserId());
+
+            new Mail()->send(
+                $cust['email'],
+                $email->subject,
+                $email->body,
+                toName: ucfirst($cust['first_name'] ?? '') . " " . ucfirst($cust['last_name'] ?? ''),
+                attachments: $email->attachements ?? [],
+            );
+
+            return new RedirectResponse($request->headers->get('referer'));
+        }
+    }
+
+    /**
+     * @throws MpdfException
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function paymentPrintInvoice(...$args)
+    {
+        extract($args);
+        $store = new Store($request->query->get('store_id'));
+        $payment = CommercePayment::loadById($request->query->get('pid'));
+
+        PDF->WriteHTML(
+            $this->view->render('p/order_payment_print.twig',[
+                'payment' => $payment,
+                'store' => $store
+            ])
+        );
+
+        $content = PDF->Output(dest: Destination::STRING_RETURN);
+
+        return new Response($content, 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="invoice.pdf"'
+
+            ]
+        );
+    }
+
+    public function paymentsDelete(...$args)
+    {
+        extract($args);
+        $payment = CommercePayment::loadById($request->query->get('pid'));
+        $action = $request->query->get('action');
+
+        if ($action === 'delete') {
+            $payment->delete();
+            return new RedirectResponse($request->headers->get('referer'));
+        } elseif (empty($action)) {
+            return new Response($this->view->render('p/confirm_deletion.twig', [
+                'title' => "this payment",
+                'action' => $request->getUri() . "?" . http_build_query(['action' => 'delete']),
+            ]));
+        }
+
+        return new Response($this->view->render('p/deletion_error.twig', []));
+    }
+
+    public function paymentsCreditPayment(...$args)
+    {
+        extract($args);
+        $payment = CommercePayment::loadById($request->query->get('pid'));
+
+        if ($request->getMethod() === 'POST') {
+            $payment_data = $request->request->all();
+            if (!empty($payment_data['type'])) {
+
+                $payment_data['order'] = $payment->getOrder();
+                $gateway = PaymentGatWayAbstract::getTypeGateway($payment_data['type']);
+
+                if ($gateway instanceof PaymentGetWayInterface) {
+                    $result = $gateway->processPayment($payment_data);
+
+                    if ($result) {
+                        return new RedirectResponse('/');
+                    }
+                    $messages = [];
+                    foreach ($gateway->errors as $error) {
+                        $messages[] = [
+                            'type' => 'error',
+                            'content' => $error,
+                            'class' => 'danger'
+                        ];
+                    }
+                }
+
+            }
+        }
+
+        return new Response($this->view->render('p/payments_credit_payment.twig', [
+            'payment' => $payment,
+            'amount' => $payment->getAmount(),
+            'currency' => $payment->getCurrency(),
+            'type' =>  'credit_card',
+            'total' => $payment->getAmount(),
         ]));
     }
 }

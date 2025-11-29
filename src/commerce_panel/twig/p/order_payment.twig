@@ -1,0 +1,55 @@
+<div class="row mt-5">
+    <div class="col-lg-12">
+        <div class="card px-2">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <h3 class="text-end my-5">Payment&nbsp;&nbsp;#PAY-{{ payment.id }}</h3>
+                    <hr>
+                </div>
+                <div class="container-fluid d-flex justify-content-between">
+                    <div class="col-lg-3 ps-0">
+                        <p class="mt-5 mb-2"><b>{{ store.getStoreName }}</b></p>
+                        <p>{{ store.getStoreAddress }}</p>
+                        <p>{{ store.getSupportEmail }}</p>
+                        <p>{{ store.getPhone }}</p>
+                    </div>
+                    <div class="col-lg-3 pe-0">
+                        <p class="mt-5 mb-2 text-end"><b>Payment By</b></p>
+                        <p class="text-end">
+                            {{ payment.getOrder.getBilling.getAddress|raw }}
+                        </p>
+                    </div>
+                </div>
+                <div class="container-fluid d-flex justify-content-between">
+                    <div class="col-lg-3 ps-0">
+                        <p class="mb-0 mt-5">Payment Date : {{ payment.getCreatedAt|date('jS M Y') }}</p>
+                    </div>
+                </div>
+                <div class="container-fluid mt-5 d-flex justify-content-center w-100">
+                    <div class="table-responsive w-100">
+                        <table class="table">
+                            <thead>
+                            <tr class="bg-dark text-white">
+                                <th>#</th>
+                                <th>Method</th>
+                                <th class="text-end">Currency</th>
+                                <th class="text-end">Amount</th>
+                                <th class="text-end">Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="text-end">
+                                <td class="text-start">{{ payment.getTransactionId }}</td>
+                                <td class="text-start">{{ payment.getMethod }}</td>
+                                <td class="text-start">{{ payment.getCurrency }}</td>
+                                <td class="text-start">{{ currency_format(payment.getAmount, payment.getCurrency) }}</td>
+                                <td class="text-start">{{ payment.getStatus|upper  }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -134,6 +134,15 @@ class View
         $twig->addGlobal("CSS", $commerceAssets->getContentCss());
         $twig->addGlobal("JS", $commerceAssets->getContentJs());
 
+        $payments = [];
+        foreach (STORE_LIST as $key=>$store) {
+            $payments[] = [
+                'link' => "/store/{$store['id']}/payments",
+                'name' => $store['name']. " Payments",
+            ];
+        }
+        $twig->addGlobal("PAYMENTS", $payments);
+
         $twig->addExtension(new \Twig\Extension\DebugExtension());
         $twig->addExtension(new \Twig\Extension\StringLoaderExtension());
 

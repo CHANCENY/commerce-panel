@@ -1,0 +1,73 @@
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; margin-top:40px;">
+    <tr>
+        <td>
+            <table width="100%" cellpadding="20" cellspacing="0" border="0" style="border:1px solid #ddd;">
+                <tr>
+                    <td>
+
+                        <!-- Header -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td align="right" style="font-size:22px; font-weight:bold; padding-bottom:10px;">
+                                    Payment #PAY-{{ payment.id }}
+                                </td>
+                            </tr>
+                            <tr><td style="border-bottom:1px solid #ccc;"></td></tr>
+                        </table>
+
+                        <!-- Store + Billing -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:30px;">
+                            <tr>
+                                <!-- Store Info -->
+                                <td width="50%" valign="top" style="font-size:14px; line-height:20px;">
+                                    <p><strong>{{ store.getStoreName }}</strong></p>
+                                    <p>{{ store.getStoreAddress }}</p>
+                                    <p>{{ store.getSupportEmail }}</p>
+                                    <p>{{ store.getPhone }}</p>
+                                </td>
+
+                                <!-- Payment By -->
+                                <td width="50%" valign="top" align="right" style="font-size:14px; line-height:20px;">
+                                    <p><strong>Payment By</strong></p>
+                                    <p>{{ payment.getOrder.getBilling.getAddress|raw }}</p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Payment Date -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:30px;">
+                            <tr>
+                                <td style="font-size:14px;">
+                                    Payment Date: {{ payment.getCreatedAt|date('jS M Y') }}
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Payment Table -->
+                        <table width="100%" cellpadding="6" cellspacing="0" border="0" style="margin-top:40px; border-collapse:collapse; font-size:14px; color: #fff;">
+                            <thead>
+                            <tr style="background:#222; color: #fff; text-align:left;">
+                                <th style="border:1px solid #444;">#</th>
+                                <th style="border:1px solid #444;">Method</th>
+                                <th style="border:1px solid #444;" align="right">Currency</th>
+                                <th style="border:1px solid #444;" align="right">Amount</th>
+                                <th style="border:1px solid #444;" align="right">Status</th>
+                            </tr>
+                            </thead>
+                            <tbody style="color: #000;">
+                            <tr>
+                                <td style="border:1px solid #ccc; color: #000;">{{ payment.getTransactionId }}</td>
+                                <td style="border:1px solid #ccc;color: #000;">{{ payment.getMethod }}</td>
+                                <td style="border:1px solid #ccc;color: #000;" align="right">{{ payment.getCurrency }}</td>
+                                <td style="border:1px solid #ccc;color: #000;" align="right">{{ currency_format(payment.getAmount, payment.getCurrency) }}</td>
+                                <td style="border:1px solid #ccc;color: #000;" align="right">{{ payment.getStatus|upper }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

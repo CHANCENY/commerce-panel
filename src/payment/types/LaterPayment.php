@@ -12,6 +12,7 @@ use Simp\Router\Router\NotFoundException;
 class LaterPayment extends PaymentGatWayAbstract
 {
 
+    public array $errors = [];
     public function getPaymentForm(array $options = []): string
     {
         return VIEW->render('p/later_payment_form.twig', $options);
@@ -94,9 +95,9 @@ class LaterPayment extends PaymentGatWayAbstract
 
             $result = $this->saveOrder($paymentData);
 
-            if (!$result->getOrders()) {
+            $orders = $result->getOrders();
 
-                $orders = $result->getOrders();
+            if ($orders) {
 
                 $results = [];
                 foreach ($orders as $order) {
@@ -106,7 +107,7 @@ class LaterPayment extends PaymentGatWayAbstract
                     $payment->setAmount(self::getKeyValue($paymentData, 'amount'));
                     $payment->setStatus('pending');
                     $payment->setCurrency(self::getKeyValue($paymentData, 'currency'));
-                    $payment->setMethod('Pay later');
+                    $payment->setMethod($this->getGatewayId());
                     $payment->setTransactionId(time());
                     if ($payment->save()) {
 

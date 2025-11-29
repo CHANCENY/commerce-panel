@@ -244,7 +244,7 @@
                     </li>
                     <li class="nav-item mega-menu">
                         <a href="#" class="nav-link">
-                            <i class="mdi mdi-view-array menu-icon"></i>
+                            <i class="mdi mdi-order-alphabetical-ascending menu-icon"></i>
                             <span class="menu-title">Orders</span>
                             <i class="menu-arrow"></i>
                         </a>
@@ -275,42 +275,36 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item mega-menu">
+                        <a href="#" class="nav-link">
+                            <i class="mdi mdi-contactless-payment menu-icon"></i>
+                            <span class="menu-title">Payments</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="submenu">
+                            <div class="col-group-wrapper row">
                                 <div class="col-group col-md-4">
                                     <div class="row">
                                         <div class="col-12">
-                                            <p class="category-heading">Advanced Elements</p>
+                                            <p class="category-heading">Store Payments</p>
                                             <div class="submenu-item">
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <ul>
-                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/dragula.html">Dragula</a></li>
-                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/carousel.html">Carousel</a></li>
-                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/clipboard.html">Clipboard</a></li>
-                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/context-menu.html">Context Menu</a></li>
-                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/loaders.html">Loader</a></li>
-                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/slider.html">Slider</a></li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <ul>
-                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/popups.html">Popup</a></li>
-                                                            <li class="nav-item"><a class="nav-link" href="pages/ui-features/notifications.html">Notification</a></li>
+                                                            {% for order_link in PAYMENTS %}
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link" href="{{ order_link.link }}">{{ order_link.name }}</a>
+                                                                </li>
+                                                            {% endfor %}
                                                         </ul>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-group col-md-4">
-                                    <p class="category-heading">Icons</p>
-                                    <ul class="submenu-item">
-                                        <li class="nav-item"><a class="nav-link" href="pages/icons/flag-icons.html">Flag Icons</a></li>
-                                        <li class="nav-item"> <a class="nav-link" href="pages/icons/mdi.html">Mdi icons</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="pages/icons/font-awesome.html">Font Awesome</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="pages/icons/simple-line-icon.html">Simple Line Icons</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="pages/icons/themify.html">Themify Icons</a></li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>

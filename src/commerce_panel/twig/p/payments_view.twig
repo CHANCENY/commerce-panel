@@ -1,0 +1,84 @@
+{% extends 'main/base.twig' %}
+
+{% block body %}
+
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <div class="card px-2">
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <h3 class="text-end my-5">Payment&nbsp;&nbsp;#PAY-{{ payment.id }}</h3>
+                        <hr>
+                    </div>
+                    <div class="container-fluid d-flex justify-content-between">
+                        <div class="col-lg-3 ps-0">
+                            <p class="mt-5 mb-2"><b>{{ store.getStoreName }}</b></p>
+                            <p>{{ store.getStoreAddress }}</p>
+                            <p>{{ store.getSupportEmail }}</p>
+                            <p>{{ store.getPhone }}</p>
+                        </div>
+                        <div class="col-lg-3 pe-0">
+                            <p class="mt-5 mb-2 text-end"><b>Payment By</b></p>
+                            <p class="text-end">
+                                {{ payment.getOrder.getBilling.getAddress|raw }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="container-fluid d-flex justify-content-between">
+                        <div class="col-lg-3 ps-0">
+                            <p class="mb-0 mt-5">Payment Date : {{ payment.getCreatedAt|date('jS M Y') }}</p>
+                        </div>
+                    </div>
+                    <div class="container-fluid mt-5 d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <table class="table">
+                                <thead>
+                                <tr class="bg-dark text-white">
+                                    <th>#</th>
+                                    <th>Method</th>
+                                    <th class="text-start">Currency</th>
+                                    <th class="text-start">Amount</th>
+                                    <th class="text-start">Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-end">
+                                        <td class="text-start">{{ payment.getTransactionId }}</td>
+                                        <td class="text-start">{{ payment.getMethod }}</td>
+                                        <td class="text-start">{{ payment.getCurrency }}</td>
+                                        <td class="text-start">{{ currency_format(payment.getAmount, payment.getCurrency) }}</td>
+                                        <td class="text-start">{{ payment.getStatus|upper  }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="container-fluid w-100 mt-5">
+                        <div class="form-group">
+                            <label for="status">Select one of the status below to change order status</label>
+                            <select onchange="saveOrderStatusChange(this, {{ payment.id }})" name="status" id="status" class="form-control form-select">
+                                <option {{ payment.status == 'paid' ? 'selected' : '' }} value="completed">Paid</option>
+                                <option {{ payment.status == 'refunded' ? 'selected' : '' }} value="refunded">Refunded</option>
+                                <option {{ payment.status == 'pending' ? 'selected' : '' }} value="refunded">Pending</option>
+                            </select>
+                        </div>
+                        <a href="/store/{{ store.getStoreId }}/payments/{{ payment.id }}/print" class="btn btn-primary float-end mt-4 ms-2"><i class="mdi mdi-printer me-1"></i>Print</a>
+                        <a href="/store/{{ store.getStoreId }}/payments/{{ payment.id }}/send-invoice" class="btn btn-success float-end mt-4"><i class="mdi mdi-telegram me-1"></i>Send Invoice</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function saveOrderStatusChange(el, orderId) {
+            let status = el.value;
+            fetch('/store/{{ store.getStoreId }}/payments/'+orderId+'/status?status='+status, {
+                method: 'POST'
+            }).then(res => res.json()).then(data => {
+                console.log(data);
+            });
+        }
+    </script>
+
+{% endblock %}
