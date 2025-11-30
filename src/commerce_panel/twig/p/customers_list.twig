@@ -1,0 +1,74 @@
+{% extends 'main/base.twig' %}
+
+{% block body %}
+
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Customers {{ store.getStoreName }}</h4>
+                    <div class="row grid-margin">
+                        <div class="col-12">
+                            {% if message %}
+                                <div class="alert alert-{{ message.class }}" role="alert">
+                                    <strong>{{ message.type }}!</strong> {{ message.content }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table id="order-listing" class="table">
+                                    <thead>
+                                    <tr class="bg-dark text-white">
+                                        <th>UID #</th>
+                                        <th>FullName</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Address Line 1</th>
+                                        <th>City</th>
+                                        <th>State</th>
+                                        <th>Postal Code</th>
+                                        <th>Country</th>
+                                        <th>Order</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for cust in customers %}
+                                        <tr>
+                                            <td>{{ cust.id }}</td>
+                                            <td>{{ cust.full_name }}</td>
+                                            <td>{{ cust.email }}</td>
+                                            <td>{{ cust.phone }}</td>
+                                            <td>{{ cust.address_line1 }}</td>
+                                            <td>{{ cust.city }}</td>
+                                            <td>{{ cust.state }}</td>
+                                            <td>{{ cust.postal_code }}</td>
+                                            <td>{{ cust.country }}</td>
+                                            <td>
+                                                <a href="/store/{{ store.getStoreId }}/orders/{{ cust.order_id }}/view"
+                                                 class="btn btn-outline-primary"
+                                                >
+                                                    View Order
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="10">No customers ({{ store.getStoreName() }})</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

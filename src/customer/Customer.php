@@ -128,4 +128,12 @@ class Customer
         return $this->addressHandler->create($data);
     }
 
+    public static function getCustomerByStore(string $storeId): array
+    {
+        $query = "SELECT cust.*, cust.id AS uid, cb.*, cb.id AS add_id FROM commerce_user AS cust INNER JOIN commerce_order AS co ON cust.id = co.user_id INNER JOIN commerce_billing_address AS cb ON co.id = cb.order_id WHERE co.store_id = :store_id";
+        $stmt = DB_CONNECTION->connect()->prepare($query);
+        $stmt->execute([':store_id' => $storeId]);
+        return $stmt->fetchAll();
+    }
+
 }

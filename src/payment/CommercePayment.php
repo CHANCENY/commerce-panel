@@ -48,6 +48,7 @@ class CommercePayment
         $stmt = DB_CONNECTION->connect()->prepare("SELECT * FROM commerce_payment WHERE order_id = ? ORDER BY id DESC");
         $stmt->execute([$orderId]);
         $payment = $stmt->fetch();
+        if (!$payment) return null;
         return new self()->load($payment->id);
     }
 
@@ -143,7 +144,7 @@ class CommercePayment
     { return $this->status === 'cancelled'; }
     public function isRefunded(): bool
     { return $this->status === 'refunded'; }
-    public function id()
+    public function id(): ?int
     {
         return $this->id;
     }

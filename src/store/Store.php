@@ -164,4 +164,11 @@ class Store
     public function getStoreAddress() {
         return $this->store['address'];
     }
+
+    public function __call(string $name, array $arguments)
+    {
+        $list = explode('_', $name);
+        $name = end($list);
+        return $this->store[$name] ?? null;
+    }
 }

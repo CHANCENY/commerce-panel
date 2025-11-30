@@ -11,6 +11,7 @@ use Simp\Commerce\customer\Customer;
 use Simp\Commerce\product\Price;
 use Simp\Commerce\product\Product;
 use Simp\Commerce\product\ProductAttribute;
+use Simp\Commerce\token\Token;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -121,6 +122,7 @@ class View
         }
         $twig->addGlobal("ATTRIBUTES", $attributes);
         $twig->addGlobal("DELIVERY_TYPE",DELIVERY_TYPE);
+        $twig->addGlobal('_MENUS', _MENUS);
 
         $store_orders = [];
         foreach (STORE_LIST as $key=>$store) {
@@ -283,6 +285,9 @@ class View
             }
             return $data;
 
+        }));
+        $twig->addFunction(new TwigFunction('token_replace', function ($token, $values) {
+            return new Token()->replace($token, $values);
         }));
 
 

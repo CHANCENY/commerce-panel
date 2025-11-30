@@ -80,6 +80,12 @@
                                 <option {{ order.status == 'shipping' ? 'selected' : '' }} value="shipping">Shipping</option>
                             </select>
                         </div>
+                        {% if order.getPayment.id is empty  %}
+                            <a href="/store/{{ store.getStoreId }}/payments/{{ order.id }}/order-payment"
+                               class="btn btn-secondary float-end mt-4 ms-2">
+                                <i class="mdi mdi-credit-card-check me-1"></i>Pay
+                            </a>
+                        {% endif %}
                         <a href="/store/{{ store.getStoreId }}/orders/{{ order.id }}/print" class="btn btn-primary float-end mt-4 ms-2"><i class="mdi mdi-printer me-1"></i>Print</a>
                         <a href="/store/{{ store.getStoreId }}/orders/{{ order.id }}/send-invoice" class="btn btn-success float-end mt-4"><i class="mdi mdi-telegram me-1"></i>Send Invoice</a>
                     </div>

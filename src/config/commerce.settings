@@ -3803,6 +3803,40 @@ const _CALLBACK = [
 ];
 
 /**
+ * _MENUS contains the menu structure for the admin panel
+ */
+define("_MENUS", [
+    'customers' => [
+        'name' => 'Customers',
+        'enabled' => true,
+        'submenus' => [
+            'name' => "Store Customers",
+            'links' => array_map(function ($store){
+                return [
+                    'name' => '[store_name] customers',
+                    'link' => '/store/[store_id]/customers/list',
+                    'store' => new \Simp\Commerce\store\Store($store['id']),
+                ];
+            }, STORE_LIST)
+        ]
+    ]
+]);
+
+/**
+ * _TOKEN_REGISTER contains the token for the system
+ */
+const _TOKENS_REGISTER = [
+    'store_id' => \Simp\Commerce\store\StoreToken::class,
+    'store_name' => \Simp\Commerce\store\StoreToken::class,
+    'store_description'=> \Simp\Commerce\store\StoreToken::class,
+    'store_currency' => \Simp\Commerce\store\StoreToken::class,
+    'store_country' => \Simp\Commerce\store\StoreToken::class,
+    'store_contact_email' => \Simp\Commerce\store\StoreToken::class,
+    'store_phone' => \Simp\Commerce\store\StoreToken::class,
+    'store_address' => \Simp\Commerce\store\StoreToken::class,
+];
+
+/**
  * Payment supports
  */
 const PAYMENT_METHODS = [
@@ -4048,11 +4082,15 @@ try{
         $router->get('/store/[store_id:string]/payments/[pid:int]/delete','paymentsDelete', CommercePanelController::class);
         $router->get('/store/[store_id:string]/payments/[pid:int]/credit-payment','paymentsCreditPayment', CommercePanelController::class);
         $router->post('/store/[store_id:string]/payments/[pid:int]/credit-payment','paymentsCreditPayment', CommercePanelController::class);
+        $router->get('/store/[store_id:string]/payments/[oid:int]/order-payment','paymentsOrderPayment', CommercePanelController::class);
+        $router->post('/store/[store_id:string]/payments/[oid:int]/order-payment','paymentsOrderPayment', CommercePanelController::class);
+
 
         $router->post('/store/[store_id:string]/payments/[pid:int]/status','paymentUpdateStatus', CommercePanelController::class);
         $router->get('/store/[store_id:string]/payments/[pid:int]/send-invoice','paymentSendInvoice', CommercePanelController::class);
         $router->get('/store/[store_id:string]/payments/[pid:int]/print','paymentPrintInvoice', CommercePanelController::class);
-       
+
+        $router->get('/store/[store_id:string]/customers/list','customerListing', CommercePanelController::class);
 
         return $router->getResponse();
     })();

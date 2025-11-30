@@ -1022,4 +1022,64 @@ class CommercePanelController
             'total' => $payment->getAmount(),
         ]));
     }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function paymentsOrderPayment(...$args): RedirectResponse|Response
+    {
+        extract($args);
+
+        $oid = $request->query->get('oid');
+        $order = new Order($oid);
+
+        if ($request->getMethod() === 'POST') {
+
+            $payment_data = $request->request->all();
+            if (!empty($payment_data['type'])) {
+
+                $payment_data['order'] = $order;
+                $gateway = PaymentGatWayAbstract::getTypeGateway($payment_data['type']);
+
+                if ($gateway instanceof PaymentGetWayInterface) {
+                    $result = $gateway->processPayment($payment_data);
+
+                    if ($result) {
+                        return new RedirectResponse('/');
+                    }
+                    $messages = [];
+                    foreach ($gateway->errors as $error) {
+                        $messages[] = [
+                            'type' => 'error',
+                            'content' => $error,
+                            'class' => 'danger'
+                        ];
+                    }
+                }
+
+            }
+        }
+
+        return new Response($this->view->render('p/payments_credit_payment.twig', [
+            'amount' => $order->getGrandTotal(),
+            'currency' => $order->getCurrency(),
+            'type' =>  'credit_card',
+            'total' => $order->getGrandTotal(),
+        ]));
+
+    }
+
+    public function customerListing(...$args)
+    {
+        extract($args);
+
+        $customers = Customer::getCustomerByStore($request->query->get('store_id'));
+
+        return new Response($this->view->render('p/customers_list.twig', [
+            'customers' => $customers,
+            'store' => new Store($request->query->get('store_id')),
+        ]));
+    }
 }

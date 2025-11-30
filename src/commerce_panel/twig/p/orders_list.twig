@@ -51,9 +51,11 @@
                                                 <a href="/store/{{ store.getStoreId }}/orders/{{ order.id }}/view" class="btn btn-light">
                                                     <i class="mdi mdi-eye text-primary"></i>view
                                                 </a>
-                                                <button class="btn btn-light" onclick="window.location.href='/store/{{ store.getStoreId() }}/order/{{ order.id }}/delete';">
-                                                    <i class="mdi mdi-delete text-danger"></i>Remove
+                                                {% if order.getPayment.id  %}
+                                                <button class="btn btn-light" onclick="window.location.href='/store/{{  store.getStoreId  }}/payments/{{ order.getPayment.id }}/view';">
+                                                    <i class="mdi mdi-contactless-payment text-primary"></i>Payment
                                                 </button>
+                                                {% endif %}
                                             </td>
                                         </tr>
                                     {% else %}
